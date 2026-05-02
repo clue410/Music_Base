@@ -1,3 +1,4 @@
+import time
 import tkinter as tk
 import customtkinter
 
@@ -17,28 +18,74 @@ import colorsys
 # from PIL import ImageDraw
 import json
 import os
+from PIL import Image, ImageTk
+
+def click_tool(tool_name):
+    print(f"clicked: {tool_name}")
 
 
-def label_click(item_id):
-    print(f"LABEL CLICK {item_id}")
+def say_happy_birthday(event=None):
+    overlay = tk.Frame(root, bg="#060A13", width=root_width, height=root_height, borderwidth=5, relief="raised")
+    overlay.place(x=(row_width / 2), y=(row_height / 2) + 150)
+    overlay.lift()
+
+    heading = tk.Frame(overlay, width=950, height=75, bg="#060A13")
+    heading.pack(side="top")
+    heading_text = tk.Label(heading, text="Say Happy Birthday!", pady=26, font=("Arial", 32, "bold"), bg="#060A13",
+                            fg="white")
+    heading_text.pack(fill="both", side="top")
+
+    text = tk.Frame(overlay, bg="#C6307B", width=675, height=275)
+    text.pack(side="left")
+    body_text = tk.Label(text, text="The Downward Spiral (Nine Inch Nails) released 29 years ago today!",
+                         wraplength=625, pady=26, font=("Arial", 20, "bold"), bg="#060A13",
+                         fg="white")
+    body_text.pack(fill="x", side="top")
+
+    overlay.update()
+    text_length = body_text.winfo_width()
+    body_text.config(padx=(625 - text_length) / 2)
+
+    album = tk.Frame(overlay, bg="#2ABF02", width=275, height=275)
+    album.pack(side="right")
+
+    original_image = Image.open("assets/temp_styling_files/Nine_Inch_Nails_-_Pretty_Hate_Machine.png")
+    resized_image = original_image.resize((276, 276), Image.LANCZOS)
+    tk_image = ImageTk.PhotoImage(resized_image)
+    img_label = tk.Label(album, image=tk_image, bg="#ffcc7a")
+    img_label.image = tk_image
+    img_label.place(relx=0.5, rely=0.5, anchor="center")
+
+    close_btn = tk.Button(overlay, text="Say Happy Birthday and Close", font=("Arial", 14, "bold"),
+                          activebackground="blue", bg="#C6307B", fg="black", bd=0, cursor="hand2",
+                          command=overlay.place_forget)
+    close_btn.place(x=row_width - (row_width / 2) + close_btn.winfo_width(), y=row_height + 120)
+    close_btn.lift()
 
 
 root = tkinterdnd2.Tk()
-tool_rack_root = tkinterdnd2.Tk()
-tool_rack_root.withdraw()
+# tool_rack_root = tkinterdnd2.Tk()
+# tool_rack_root.withdraw()
 
 root.bind()
 root.title("RIPPER")
+# root.attributes("-fullscreen", False)
 root.attributes("-fullscreen", True)
 # root.geometry("1920x1080")
-root.state('zoomed')
-root.resizable(False, False)
+print(f"root state: {root.state()}, root fullscreen: {root.attributes('-fullscreen')}")
+# root.resizable(False, False)
 root.configure(bg='#060A13')
+
+popup_host = tk.Toplevel(root)
+popup_host.withdraw()
+
 root.update()
 root_width = root.winfo_width()
 root_height = root.winfo_height()
 root.grid_rowconfigure(0, weight=1)
+
 print(root_height)
+print(root_width)
 
 action_rack = tk.Frame(root, bg="#060A13", highlightbackground="#0854ff", relief="flat", width=(root_width / 2),
                        height=root_height - 35)
@@ -75,6 +122,7 @@ rack_item_3_frame.place(x=15, y=pad + (row_height + pad) * 2)
 rack_item_4_frame.place(x=15, y=pad + (row_height + pad) * 3)
 
 sq = int(row_height)
+# sq = int(row_height)
 y_pos = 0
 x_left = 0
 x_mid = (row_width - sq) // 2
@@ -122,21 +170,56 @@ sandpit_icon = tk.PhotoImage(file="assets/tool_covers/sandpit_tool_icon.png")
 view_entry_icon = tk.PhotoImage(file="assets/tool_covers/view_entry_data_tool_icon.png")
 weld_tool_icon = tk.PhotoImage(file="assets/tool_covers/weld_tool_icon.png")
 
-tk.Label(tool_1, image=weld_tool_icon, bg="#ffcc7a").place(relx=0.5, rely=0.5, anchor="center")
-tk.Label(tool_2, image=flac_album_weld_icon, bg="#ffcc7a").place(relx=0.5, rely=0.5, anchor="center")
-tk.Label(tool_3, image=mp3_album_weld_icon, bg="#ffcc7a").place(relx=0.5, rely=0.5, anchor="center")
+label1 = (tk.Label(tool_1, image=weld_tool_icon, bg="#ffcc7a"))
+label1.place(relx=0.5, rely=0.5, anchor="center")
+label1.bind("<Button-1>", lambda e: click_tool("weld"))
 
-tk.Label(tool_4, image=view_entry_icon, bg="#ffcc7a").place(relx=0.5, rely=0.5, anchor="center")
-tk.Label(tool_5, image=flac_2_mp3_icon, bg="#ffcc7a").place(relx=0.5, rely=0.5, anchor="center")
-tk.Label(tool_6, image=bulk_flac_2_mp3_icon, bg="#ffcc7a").place(relx=0.5, rely=0.5, anchor="center")
+label2 = (tk.Label(tool_2, image=flac_album_weld_icon, bg="#ffcc7a"))
+label2.place(relx=0.5, rely=0.5, anchor="center")
+label2.bind("<Button-1>", lambda e: click_tool("flac album"))
 
-tk.Label(tool_7, image=sandpit_icon, bg="#ffcc7a").place(relx=0.5, rely=0.5, anchor="center")
-tk.Label(tool_8, image=equaliser_icon, bg="#ffcc7a").place(relx=0.5, rely=0.5, anchor="center")
-tk.Label(tool_9, image=help_icon, bg="#ffcc7a").place(relx=0.5, rely=0.5, anchor="center")
+label3 = (tk.Label(tool_3, image=mp3_album_weld_icon, bg="#ffcc7a"))
+label3.place(relx=0.5, rely=0.5, anchor="center")
+label3.bind("<Button-1>", lambda e: click_tool("mp3 album"))
 
-tk.Label(tool_10, image=album_entires_icon, bg="#ffcc7a").place(relx=0.5, rely=0.5, anchor="center")
-tk.Label(tool_11, image=append_album_icon, bg="#ffcc7a").place(relx=0.5, rely=0.5, anchor="center")
-tk.Label(tool_12, image=raw_files_icon, bg="#ffcc7a").place(relx=0.5, rely=0.5, anchor="center")
+label4 = (tk.Label(tool_4, image=view_entry_icon, bg="#ffcc7a"))
+label4.place(relx=0.5, rely=0.5, anchor="center")
+label4.bind("<Button-1>", lambda e: click_tool("view entry data"))
+
+label5 = (tk.Label(tool_5, image=flac_2_mp3_icon, bg="#ffcc7a"))
+label5.place(relx=0.5, rely=0.5, anchor="center")
+label5.bind("<Button-1>", lambda e: click_tool("flac 2 mp3s"))
+
+label6 = (tk.Label(tool_6, image=bulk_flac_2_mp3_icon, bg="#ffcc7a"))
+label6.place(relx=0.5, rely=0.5, anchor="center")
+label6.bind("<Button-1>", lambda e: click_tool("flacs 2 mp3s"))
+
+label7 = (tk.Label(tool_7, image=sandpit_icon, bg="#ffcc7a"))
+label7.place(relx=0.5, rely=0.5, anchor="center")
+label7.bind("<Button-1>", lambda e: click_tool("sandpit"))
+
+label8 = (tk.Label(tool_8, image=equaliser_icon, bg="#ffcc7a"))
+label8.place(relx=0.5, rely=0.5, anchor="center")
+label8.bind("<Button-1>", lambda e: click_tool("equaliser"))
+
+label9 = (tk.Label(tool_9, image=help_icon, bg="#ffcc7a"))
+label9.place(relx=0.5, rely=0.5, anchor="center")
+label9.bind("<Button-1>", lambda e: click_tool("help"))
+
+label10 = (tk.Label(tool_10, image=album_entires_icon, bg="#ffcc7a"))
+label10.place(relx=0.5, rely=0.5, anchor="center")
+label10.bind("<Button-1>", lambda e: click_tool("view albums"))
+
+label11 = (tk.Label(tool_11, image=append_album_icon, bg="#ffcc7a"))
+label11.place(relx=0.5, rely=0.5, anchor="center")
+label11.bind("<Button-1>", lambda e: click_tool("add album"))
+
+label12 = (tk.Label(tool_12, image=raw_files_icon, bg="#ffcc7a"))
+label12.place(relx=0.5, rely=0.5, anchor="center")
+label12.bind("<Button-1>", lambda e: click_tool("view raw directory"))
 
 print(sq)
+# TODO abort fullscreen evil evil
+# nevermind were so back
+say_happy_birthday()
 root.mainloop()

@@ -4,7 +4,7 @@ from tkinter import messagebox as mb
 import tkinterdnd2
 from PIL import Image, ImageTk
 
-
+# TODO ponder on it, dont think  i need this anymo
 # make as class later
 
 def print_values(event):
