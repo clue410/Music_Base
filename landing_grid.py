@@ -37,7 +37,7 @@ def say_happy_birthday(event=None):
 
     text = tk.Frame(overlay, bg="#C6307B", width=675, height=275)
     text.pack(side="left")
-    body_text = tk.Label(text, text="The Downward Spiral (Nine Inch Nails) released 29 years ago today!",
+    body_text = tk.Label(text, text="Pretty Hate Machine (Nine Inch Nails) released 29 years ago today!",
                          wraplength=625, pady=26, font=("Arial", 20, "bold"), bg="#060A13",
                          fg="white")
     body_text.pack(fill="x", side="top")
